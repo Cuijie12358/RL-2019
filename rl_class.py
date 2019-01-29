@@ -1,6 +1,15 @@
 import numpy as np
 
-
+########################################################
+#
+# Class for Multi Armed Bandit Problem:
+# class Multi10BanditEnv:
+#       mu_arms scale: Contain the actual values of each arm(10 arms)
+# class Agent:
+#       step:   Contain the current step,
+#       reward: all the rewards,
+#       A:      times of choosing each arm,
+#       Q_a:    action-value of choosing ath arm
 class Multi10BanditEnv:
     """10-Armed Bandit with their reward distribution"""
     mu_arms = [0.2, -0.6, 1.5, 0.6, 1.2, -1.6, -0.2, -1.2, 0.7, -0.7]
@@ -15,7 +24,6 @@ class Multi10BanditEnv:
 
     def get_optimal_arm(self):
         return np.argmax(self.mu_arms) + 1
-
 
 class Agent:
     """Setting parameters for an agent"""
@@ -57,11 +65,7 @@ class Agent:
         self.reward = 0
         self.action = np.random.randint(10) + 1
 
-
-
-
-
-
+########################### Test code
 # test_a = Agent(0.1)
 # step = 15
 # average_reward = []
@@ -73,24 +77,24 @@ class Agent:
 #     optimal_action=np.append(optimal_action, test_a.get_optimal_action())
 #     print(test_a.Q_a)
 
-
-loop = 100
-test_a = Agent(0.1)
-step = 200
-average_reward=np.zeros(step)
-optimal_action=np.zeros(step)
-for i in range(loop):
-    average_reward_1 = []
-    optimal_action_1 = []
-    test_a.agent_reset()
-    while test_a.step < step:
-        test_a.update_state()
-        test_a.take_action()
-        average_reward_1=np.append(average_reward_1, test_a.get_average_reward())
-        optimal_action_1=np.append(optimal_action_1, test_a.get_optimal_action())
-    print(test_a.A)
-    average_reward += np.array(average_reward_1)
-    optimal_action += np.array(optimal_action_1)
-average_reward /= loop
-optimal_action /= loop
+#
+# loop = 100
+# test_a = Agent(0.1)
+# step = 200
+# average_reward=np.zeros(step)
+# optimal_action=np.zeros(step)
+# for i in range(loop):
+#     average_reward_1 = []
+#     optimal_action_1 = []
+#     test_a.agent_reset()
+#     while test_a.step < step:
+#         test_a.update_state()
+#         test_a.take_action()
+#         average_reward_1=np.append(average_reward_1, test_a.get_average_reward())
+#         optimal_action_1=np.append(optimal_action_1, test_a.get_optimal_action())
+#     print(test_a.A)
+#     average_reward += np.array(average_reward_1)
+#     optimal_action += np.array(optimal_action_1)
+# average_reward /= loop
+# optimal_action /= loop
 
