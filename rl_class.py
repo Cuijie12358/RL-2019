@@ -1,5 +1,4 @@
 import numpy as np
-
 ########################################################
 #
 # Class for Multi Armed Bandit Problem:
@@ -103,6 +102,7 @@ UP = 0
 RIGHT = 1
 DOWN = 2
 LEFT = 3
+Direction = np.array(['UP','RIGHT','DOWN','LEFT'])
 
 class GridWorld_DP:
     Vs = np.zeros(16)
@@ -112,6 +112,9 @@ class GridWorld_DP:
 
     def __init__(self):
         return None
+
+    def get_pis(self):
+    	return self.Policy
 
     def get_Vs(self):
         return self.Vs
@@ -130,7 +133,6 @@ class GridWorld_DP:
             s3 = i
         if (s4 != 0) and (s4%4==3) :
             s4 = i
-
         return np.array([self.Vs[s1],self.Vs[s2],self.Vs[s3],self.Vs[s4]])
 
     def policy_evaluation(self):
@@ -144,16 +146,10 @@ class GridWorld_DP:
         nextV_ifpi = np.zeros(4)
         for i in range(1,15):
             Vs4 = self.find_Vs4(i)
-            nextV_ifpi[:] = 1 * (self.reward - Vs4)-self.Vs[i]
+            nextV_ifpi[:] = 1 * (self.reward + Vs4)-self.Vs[i]
             self.Policy[i, nextV_ifpi != np.max(nextV_ifpi)] = 0
             self.Policy[i]=self.Policy[i]/np.sum(self.Policy[i])
 
-
-
-
-
-
-#
 # gridworld = GridWorld_DP()
 # delta = 999
 # threshold = 0.01
@@ -168,10 +164,35 @@ class GridWorld_DP:
 #     gridworld.set_vs(next_v)
 #     delta = max([delta,np.max(np.abs(next_v-V))])
 # print("The evaluation converges at last!")
-
-
-
-
-
-
-
+# gridworld = GridWorld_DP()
+# delta = 999
+# threshold = 0.01
+# K=0
+# old_action = gridworld.get_pis()
+# new_action = np.array(old_action)+1
+# while np.sum(old_action - new_action):
+#     # policy evaluation
+#     while delta > threshold:
+#         delta = 0
+#         V = gridworld.get_Vs()
+#         # print("K=",K)
+#         # print(np.reshape(V,(4,4)))
+#         next_v = gridworld.policy_evaluation()
+#         gridworld.policy_improvement()
+#
+#         K+=1
+#         gridworld.set_vs(next_v)
+#         delta = max([delta,np.max(np.abs(next_v-V))])
+#
+#     # policy improvement
+#
+#     old_action = gridworld.get_pis()
+#     gridworld.policy_improvement()
+#     new_action = gridworld.get_pis()
+#
+#     # focus on the state 9
+#     print("DIRECTION IN STATE 9:",Direction[gridworld.Policy[9]!=0])
+#
+#
+# print(np.reshape(gridworld.get_Vs(),(4,4)))
+# print("The evaluation converges at last!")
