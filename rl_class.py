@@ -98,3 +98,80 @@ class Agent:
 # average_reward /= loop
 # optimal_action /= loop
 
+
+UP = 0
+RIGHT = 1
+DOWN = 2
+LEFT = 3
+
+class GridWorld_DP:
+    Vs = np.zeros(16)
+    Policy = 0.25 * np.ones((16,4))
+    reward = -1
+    theta = 0.1
+
+    def __init__(self):
+        return None
+
+    def get_Vs(self):
+        return self.Vs
+
+    def set_vs(self,vs):
+        self.Vs=vs
+
+    # up, right, down, left. The same as UCL did.
+    def find_Vs4(self,i):
+        s1, s2, s3, s4 = i-4,i+1,i+4,i-1
+        if s1 < 0:
+            s1 = i
+        if s2 % 4 == 0:
+            s2 = i
+        if s3 > 15:
+            s3 = i
+        if (s4 != 0) and (s4%4==3) :
+            s4 = i
+
+        return np.array([self.Vs[s1],self.Vs[s2],self.Vs[s3],self.Vs[s4]])
+
+    def policy_evaluation(self):
+        next_Vs = np.zeros(16)
+        for i in range(1,15):
+            Vs4 = self.find_Vs4(i)
+            next_Vs[i] = np.round(np.sum(self.Policy[i]*1 * (self.reward + Vs4)),2)
+        return next_Vs
+
+    def policy_improvement(self):
+        nextV_ifpi = np.zeros(4)
+        for i in range(1,15):
+            Vs4 = self.find_Vs4(i)
+            nextV_ifpi[:] = 1 * (self.reward - Vs4)-self.Vs[i]
+            self.Policy[i, nextV_ifpi != np.max(nextV_ifpi)] = 0
+            self.Policy[i]=self.Policy[i]/np.sum(self.Policy[i])
+
+
+
+
+
+
+#
+# gridworld = GridWorld_DP()
+# delta = 999
+# threshold = 0.01
+# K=0
+# while delta > threshold:
+#     delta = 0
+#     V = gridworld.get_Vs()
+#     print("K=",K)
+#     print(np.reshape(V,(4,4)))
+#     next_v = gridworld.policy_evaluation()
+#     K+=1
+#     gridworld.set_vs(next_v)
+#     delta = max([delta,np.max(np.abs(next_v-V))])
+# print("The evaluation converges at last!")
+
+
+
+
+
+
+
