@@ -150,6 +150,15 @@ class GridWorld_DP:
             self.Policy[i, nextV_ifpi != np.max(nextV_ifpi)] = 0
             self.Policy[i]=self.Policy[i]/np.sum(self.Policy[i])
 
+    def value_iteration(self):
+        next_Vs = np.zeros(16)
+        self.policy_improvement()
+        for i in range(1,15):
+            Vs4 = self.find_Vs4(i)
+            next_Vs[i] = np.round(np.sum(self.Policy[i]*1 * (self.reward + Vs4)),2)
+        return next_Vs
+
+
 # gridworld = GridWorld_DP()
 # delta = 999
 # threshold = 0.01
@@ -196,3 +205,19 @@ class GridWorld_DP:
 #
 # print(np.reshape(gridworld.get_Vs(),(4,4)))
 # print("The evaluation converges at last!")
+
+gridworld = GridWorld_DP()
+delta = 999
+threshold = 0.1
+K=0
+while delta > threshold:
+    delta = 0
+    V = gridworld.get_Vs()
+    print("K=",K)
+    print(np.reshape(V,(4,4)))
+    next_v = gridworld.value_iteration()
+    K+=1
+    gridworld.set_vs(next_v)
+    delta = max([delta,np.max(np.abs(next_v-V))])
+print("The evaluation converges at last!")
+
